@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Threading;
+using System.Runtime.InteropServices;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.UI.DownloadManager;
@@ -63,6 +64,9 @@ namespace Terraria.Social.Steam
 		}
 
 		public static bool TryInitViaGameServer() {
+			if (RuntimeInformation.ProcessArchitecture is Architecture.Arm or Architecture.Arm64)
+				return false;
+
 			ModLoader.Engine.Steam.SetAppId(ModLoader.Engine.Steam.TMLAppID_t);
 			try {
 				if (!GameServer.Init(0x7f000001, 7775, 7774, EServerMode.eServerModeNoAuthentication, "0.11.9.0"))
